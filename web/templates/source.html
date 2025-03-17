@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ source }} - Security News</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <meta http-equiv="refresh" content="300"> <!-- Refresh every 5 minutes -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6; /* Light gray */
+            color: #374151; /* Dark gray */
+        }
+        .container {
+            max-width: 1200px;
+        }
+        h1 {
+            color: #1E3A8A; /* Dark blue */
+            font-weight: 600;
+        }
+        a.back-link {
+            color: #1E3A8A; /* Dark blue */
+            text-decoration: none;
+        }
+        a.back-link:hover {
+            color: #3B82F6; /* Lighter blue */
+            text-decoration: underline;
+        }
+        .table {
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .table thead th {
+            background-color: #1E3A8A; /* Dark blue */
+            color: #FFFFFF;
+            border: none;
+        }
+        .table tbody tr {
+            border-bottom: 1px solid #D1D5DB; /* Light gray */
+        }
+        .table tbody td {
+            vertical-align: middle;
+        }
+        .table a {
+            color: #1E3A8A; /* Dark blue */
+            text-decoration: none;
+        }
+        .table a:hover {
+            color: #3B82F6; /* Lighter blue */
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>{{ source }}</h1>
+        <p><a href="/" class="back-link">Back to Home</a></p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feed in feeds %}
+                <tr>
+                    <td><a href="{{ feed['link'] }}" target="_blank">{{ feed['title'] }}</a></td>
+                    <td>{{ feed['category'] }}</td>
+                    <td>{{ feed['description'] if feed['description'] else '' }}</td>
+                    <td>{{ feed['pub_date'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

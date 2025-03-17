@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ISO Security News Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6; /* Light gray */
+            color: #374151; /* Dark gray */
+        }
+        .sidebar {
+            background-color: #FFFFFF;
+            border-right: 1px solid #D1D5DB;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+        }
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        h1 {
+            color: #1E3A8A; /* Dark blue */
+            font-weight: 600;
+        }
+        h3 {
+            color: #1E3A8A;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .list-group-item {
+            background-color: transparent;
+            border: none;
+            padding: 8px 0;
+        }
+        .list-group-item a {
+            color: #1E3A8A; /* Dark blue */
+            text-decoration: none;
+            font-weight: 400;
+        }
+        .list-group-item a:hover {
+            color: #3B82F6; /* Lighter blue */
+            text-decoration: underline;
+        }
+        .feed-card {
+            background-color: #FFFFFF;
+            border: 1px solid #D1D5DB;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .feed-card a {
+            color: #1E3A8A;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .feed-card a:hover {
+            color: #3B82F6;
+            text-decoration: underline;
+        }
+        .feed-meta {
+            color: #6B7280; /* Gray */
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Feeds</h2>
+        <ul class="list-group">
+            {% for source in sources %}
+            <li class="list-group-item">
+                <a href="/{{ source.replace(' ', '_') }}">{{ source }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1>ISO Security News Dashboard</h1>
+        <p class="text-muted">Latest security news and advisories from the past week (updated every 5 minutes).</p>
+        
+        {% for source, feeds in top_feeds.items() %}
+        <div class="feed-section">
+            <h3>{{ source }}</h3>
+            {% for feed in feeds %}
+            <div class="feed-card">
+                <a href="{{ feed['link'] }}" target="_blank">{{ feed['title'] }}</a>
+                <div class="feed-meta">
+                    <span>{{ feed['category'] }}</span> | 
+                    <span>{{ feed['pub_date'] }}</span>
+                    {% if feed['description'] %}
+                    <p>{{ feed['description'] }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
