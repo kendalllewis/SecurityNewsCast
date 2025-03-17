@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    # ports removed - Nginx will handle external access
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - worker
+    environment:
+      - FLASK_ENV=production
+    networks:
+      - security-net
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/app/data
+    environment:
+      - FETCH_INTERVAL=300  # Fetch every 5 minutes (in seconds)
+    networks:
+      - security-net
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "5000:5000"  # HTTPS
+    volumes:
+      - ./certs:/etc/nginx/certs
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - web
+    networks:
+      - security-net
+
+networks:
+  security-net:
+    driver: bridge
+
+volumes:
+  data:
